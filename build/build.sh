@@ -28,7 +28,7 @@ case "$1" in
     go build -o ${PRO_ROOT}/imgsync -tags=containers_image_openpgp -ldflags "${LDFLAGS}" ${PRO_ROOT}/main.go
     ;&
   "docker") #使用容器编译和打包dist
-    docker build -t rikylee/google_containers_sync:$TAG_NUM $build_arg \
+    docker build -t rikylee/google_containers_imgsync:$TAG_NUM $build_arg \
       --build-arg LDFLAGS="${LDFLAGS}" -f ${Dockerfile:=Dockerfile} .
     [ -n "${DOCKER_USER}" ] && {
       docker login -u "${DOCKER_USER}" "${DOCKER_PASS}"
