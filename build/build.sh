@@ -32,7 +32,7 @@ case "$1" in
       --build-arg LDFLAGS="${LDFLAGS}" -f ${Dockerfile:=Dockerfile} .
     [ -n "${DOCKER_USER}" ] && {
       docker login -u "${DOCKER_USER}" "${DOCKER_PASS}"
-      docker push rikylee/google_containers_sync:$TAG_NUM
+      docker push rikylee/google_containers_imgsync:$TAG_NUM
     }
     ;;
   "clean")
