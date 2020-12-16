@@ -48,7 +48,7 @@ jobs:
           --password nDOPzFf4mP  \
           --push-ns=riky_k8s  \
           --user 740985173@qq.com  \
-          --command-timeout ${TMOUT:=2h}  \
+          --command-timeout ${TMOUT:=240h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
           --live-interval ${LIVE:=9m20s}  \
