@@ -52,7 +52,7 @@ jobs:
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
           --live-interval ${LIVE:=9m20s}  \
-          --login-retry ${LOGIN_RETRY:=8} \
+          --login-retry ${LOGIN_RETRY:=5} \
           --debug=${DEBUG:=false}
     - name: after_success
       run: |
