@@ -30,8 +30,8 @@ case "$1" in
   "docker") #使用容器编译和打包dist
     docker build -t rikylee/google_containers_sync:$TAG_NUM $build_arg \
       --build-arg LDFLAGS="${LDFLAGS}" -f ${Dockerfile:=Dockerfile} .
-    [ -n "${DockerUser}" ] && {
-      docker login -u "${DockerUser}" "${DockerPass}"
+    [ -n "${DOCKER_USER}" ] && {
+      docker login -u "${DOCKER_USER}" "${DOCKER_PASS}"
       docker push rikylee/google_containers_sync:$TAG_NUM
     }
     ;;
