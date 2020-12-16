@@ -14,7 +14,8 @@ jobs:
   sync:
     name: sync
     env:
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }} 
+      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}   
     runs-on: ubuntu-latest
     steps:
 
@@ -44,9 +45,9 @@ jobs:
           ${HOME}/sync/imgsync sync \
           --db ${HOME}/sync/bolt.db \
           --push-to registry.aliyuncs.com \
-          --password ${{ secrets.PASS }}  \
-          --push-ns=k8sxio  \
-          --user zhangguanzhang@qq.com  \
+          --password ${{ secrets.DOCKER_PASS }}  \
+          --push-ns=riky_k8s  \
+          --user ${{ secrets.DOCKER_USER }}  \
           --command-timeout ${TMOUT:=2h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
