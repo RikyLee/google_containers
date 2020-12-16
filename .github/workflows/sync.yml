@@ -14,8 +14,8 @@ jobs:
   sync:
     name: sync
     env:
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}   
+      DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASS }}
+      DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}   
     runs-on: ubuntu-latest
     steps:
 
