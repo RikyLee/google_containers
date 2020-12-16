@@ -44,10 +44,10 @@ jobs:
         sudo \
           ${HOME}/sync/imgsync sync \
           --db ${HOME}/sync/bolt.db \
-          --push-to registry.aliyuncs.com \
-          --password ${{ secrets.DOCKER_PASS }}  \
+          --push-to registry.cn-hangzhou.aliyuncs.com \
+          --password ${{ secrets.ALY_PASS }}  \
           --push-ns=riky_k8s  \
-          --user ${{ secrets.DOCKER_USER }}  \
+          --user ${{ secrets.ALY_USER }}  \
           --command-timeout ${TMOUT:=2h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
