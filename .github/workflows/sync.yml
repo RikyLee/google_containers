@@ -39,6 +39,7 @@ jobs:
         CGO_ENABLED: 0
     - name: sync run
       id: sync
+      timeout-minutes: 3600
       continue-on-error: true
       run: |
         sudo \
