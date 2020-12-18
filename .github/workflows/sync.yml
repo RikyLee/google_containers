@@ -19,7 +19,7 @@ jobs:
       ALY_USER: ${{ secrets.ALY_USER }}
       ALY_PASS: ${{ secrets.ALY_PASS }}  
     runs-on: ubuntu-latest
-    timeout-minutes: 3600
+    timeout-minutes: 86400
     steps:
 
     - name: Set up Go 1.x
