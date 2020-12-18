@@ -17,9 +17,11 @@ jobs:
       DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASS }}
       DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}
       ALY_USER: ${{ secrets.ALY_USER }}
-      ALY_PASS: ${{ secrets.ALY_PASS }}  
+      ALY_PASS: ${{ secrets.ALY_PASS }}
+      TMOUT: 48h
+      PROCESS: 4  
     runs-on: ubuntu-latest
-    timeout-minutes: 86400
+    timeout-minutes: 17280
     steps:
 
     - name: Set up Go 1.x
@@ -43,7 +45,7 @@ jobs:
     - name: sync run
       id: sync
       continue-on-error: true
-      timeout-minutes: 86400
+      timeout-minutes: 17280
       run: |
         sudo \
           ${HOME}/sync/imgsync sync \
@@ -52,7 +54,7 @@ jobs:
           --password ${ALY_PASS}  \
           --push-ns=riky_k8s  \
           --user ${ALY_USER}  \
-          --command-timeout ${TMOUT:=240h}  \
+          --command-timeout ${TMOUT:=48h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
           --live-interval ${LIVE:=9m20s}  \
