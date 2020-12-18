@@ -53,7 +53,7 @@ jobs:
           --push-to registry.cn-hangzhou.aliyuncs.com \
           --password ${ALY_PASS}  \
           --push-ns=riky_k8s  \
-          --user ${ALY_USER}  \
+          --user 740985173@qq.com  \
           --command-timeout ${TMOUT:=48h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
