@@ -8,14 +8,16 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron:  '* */240 * * *'
+    - cron:  '0 18 * * *'
 
 jobs:
   sync:
     name: sync
     env:
       DOCKER_PASS: ${{ secrets.DOCKER_HUB_PASS }}
-      DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}   
+      DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}
+      ALY_USER: ${{ secrets.ALY_USER }}
+      ALY_PASS: ${{ secrets.ALY_PASS }}  
     runs-on: ubuntu-latest
     timeout-minutes: 3600
     steps:
@@ -40,16 +42,16 @@ jobs:
         CGO_ENABLED: 0
     - name: sync run
       id: sync
-      timeout-minutes: 3600
       continue-on-error: true
+      timeout-minutes: 86400
       run: |
         sudo \
           ${HOME}/sync/imgsync sync \
           --db ${HOME}/sync/bolt.db \
           --push-to registry.cn-hangzhou.aliyuncs.com \
-          --password nDOPzFf4mP  \
+          --password ${ALY_PASS}  \
           --push-ns=riky_k8s  \
-          --user 740985173@qq.com  \
+          --user ${ALY_USER}  \
           --command-timeout ${TMOUT:=240h}  \
           --process-limit ${PROCESS:=2} \
           --img-timeout ${IMG_TMOUT:=10m} \
