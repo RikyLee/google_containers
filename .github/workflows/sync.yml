@@ -51,7 +51,7 @@ jobs:
           ${HOME}/sync/imgsync sync \
           --db ${HOME}/sync/bolt.db \
           --push-to registry.cn-hangzhou.aliyuncs.com \
-          --password ${ALY_PASS}  \
+          --password ${{ secrets.ALY_PASS }}  \
           --push-ns=riky_k8s  \
           --user 740985173@qq.com  \
           --command-timeout ${TMOUT:=48h}  \
