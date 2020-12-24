@@ -3,6 +3,7 @@ package cmd
 import (
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 	"github.com/zhangguanzhang/google_containers/core"
@@ -67,14 +68,18 @@ func AddSyncLimitFlags(flagSet *flag.FlagSet, op *core.SyncOption) {
 		&op.Limit, "process-limit", 2,
 		"sync process limit.",
 	)
+	log.Info("command-timeout: %s", &op.CmdTimeout)
+
 	flagSet.DurationVar(
 		&op.CmdTimeout, "command-timeout", 0,
 		"timeout for the command execution.",
 	)
+	log.Info("img-timeout: %s", &op.SingleTimeout)
 	flagSet.DurationVar(
 		&op.SingleTimeout, "img-timeout", 15*time.Minute,
 		"sync single image timeout.",
 	)
+	log.Info("live-interval: %s", &op.LiveInterval)
 	flagSet.DurationVar(
 		&op.LiveInterval, "live-interval", 0,
 		"live output in ci-runner.",

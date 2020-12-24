@@ -31,6 +31,7 @@ func Run(opt *SyncOption) {
 
 	var cancel context.CancelFunc
 	opt.Ctx, cancel = context.WithCancel(context.Background())
+	log.Info("command-timeout: %s", opt.CmdTimeout)
 	if opt.CmdTimeout > 0 {
 		opt.Ctx, cancel = context.WithTimeout(opt.Ctx, opt.CmdTimeout)
 	}
