@@ -22,6 +22,7 @@ jobs:
       PROCESS: 4  
     runs-on: ubuntu-latest
     timeout-minutes: 17280
+    continue-on-error: true
     steps:
 
     - name: Set up Go 1.x
@@ -67,6 +68,7 @@ jobs:
         ${HOME}/sync/imgsync sum ${HOME}/sync/bolt.db | wc -l
       if: steps.sync.outcome == 'success'
     - name: after_failure
+      continue-on-error: true
       run: |
         bash .github/scripts/ci-after.sh
         ls -alh ${HOME}/sync/
