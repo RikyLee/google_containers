@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+docker login -u rikylee -p ${DOCKER_PASS}
 
 cd $HOME
 mkdir -p temp
