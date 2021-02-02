@@ -2,7 +2,7 @@ name: sync k8s.gcr.io
 
 on:
   push:
-    branches: 
+    branches:
      - test
      - master
   pull_request:
@@ -19,7 +19,7 @@ jobs:
       ALY_USER: ${{ secrets.ALY_USER }}
       ALY_PASS: ${{ secrets.ALY_PASS }}
       TMOUT: 48h
-      PROCESS: 4  
+      PROCESS: 4
     runs-on: ubuntu-latest
     timeout-minutes: 17280
     continue-on-error: true
@@ -52,7 +52,7 @@ jobs:
           ${HOME}/sync/imgsync sync \
           --db ${HOME}/sync/bolt.db \
           --push-to registry.cn-hangzhou.aliyuncs.com \
-          --password nDOPzFf4mP  \
+          --password ${ALY_PASS}  \
           --push-ns=riky_k8s  \
           --user 740985173@qq.com  \
           --command-timeout 48h  \
