@@ -1,8 +1,10 @@
 package core
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -15,30 +17,39 @@ import (
 )
 
 const (
-	imgList = "https://k8s.gcr.io/v2/tags/list"
-	DefaultHTTPTimeout        = 15 * time.Second
-	repo = "k8s.gcr.io/"
+	imgList            = "https://k8s.gcr.io/v2/tags/list"
+	DefaultHTTPTimeout = 15 * time.Second
+	repo               = "k8s.gcr.io/"
 )
-
 
 // baseName，不是full name
 func NSImages(op *SyncOption) ([]string, error) {
 	log.Info("get k8s.gcr.io public images...")
-	resp, body, errs := gorequest.New().
-		Timeout(DefaultHTTPTimeout).
-		Retry(op.Retry, op.RetryInterval).
-		Get(imgList).
-		EndBytes()
-	if errs != nil {
-		return nil, fmt.Errorf("%s", errs)
-	}
-
-	defer func() { _ = resp.Body.Close() }()
 
 	var imageNames []string
-	err := jsoniter.UnmarshalFromString(jsoniter.Get(body, "child").ToString(), &imageNames)
-	if err != nil {
-		return nil, err
+	data := ParseJsonFile()
+
+	if data != nil {
+		err := jsoniter.UnmarshalFromString(jsoniter.Get(data, "child").ToString(), &imageNames)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		resp, body, errs := gorequest.New().
+			Timeout(DefaultHTTPTimeout).
+			Retry(op.Retry, op.RetryInterval).
+			Get(imgList).
+			EndBytes()
+		if errs != nil {
+			return nil, fmt.Errorf("%s", errs)
+		}
+
+		defer func() { _ = resp.Body.Close() }()
+
+		err := jsoniter.UnmarshalFromString(jsoniter.Get(body, "child").ToString(), &imageNames)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if len(op.AdditionNS) > 0 {
@@ -103,7 +114,6 @@ func ImageNames(opt *SyncOption) (Images, error) {
 		log.Fatalf("failed to submit task: %s", err)
 	}
 
-
 	imgGetWg := new(sync.WaitGroup)
 	imgGetWg.Add(len(publicImageNames))
 
@@ -133,8 +143,8 @@ func ImageNames(opt *SyncOption) (Images, error) {
 
 				for _, tag := range tags {
 					imgCh <- Image{
-						Name:       imageBaseName,
-						Tag:        tag,
+						Name: imageBaseName,
+						Tag:  tag,
 					}
 				}
 			}
@@ -150,7 +160,6 @@ func ImageNames(opt *SyncOption) (Images, error) {
 	return images, nil
 }
 
-
 func getImageTags(imageName string, opt TagsOption) ([]string, error) {
 	srcRef, err := docker.ParseReference("//" + imageName)
 	if err != nil {
@@ -161,7 +170,6 @@ func getImageTags(imageName string, opt TagsOption) ([]string, error) {
 	defer tagsCancel()
 	return docker.GetRepositoryTags(tagsCtx, sourceCtx, srcRef)
 }
-
 
 func retry(count int, interval time.Duration, f func() error) error {
 	var err error
@@ -175,4 +183,51 @@ func retry(count int, interval time.Duration, f func() error) error {
 		}
 	}
 	return err
+}
+
+func ParseJsonFile() (data []byte) {
+	path := "../repo.json"
+
+	b, ferr := PathExists(path)
+	if ferr != nil {
+		return nil
+	}
+
+	if b {
+		fp, err := os.OpenFile("./repo.json", os.O_RDONLY, 0755)
+		defer fp.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fil := make([][]byte, 0)
+		var b int64 = 0
+		for {
+			buffer := make([]byte, 1024)
+			n, err := fp.ReadAt(buffer, b)
+			b = b + int64(n)
+			fil = append(fil, buffer)
+			if err != nil {
+				fmt.Println(err.Error())
+				break
+			}
+		}
+		data := bytes.Join(fil, []byte(""))
+
+		return data[:b]
+	} else {
+		return nil
+	}
+
+}
+
+func PathExists(path string) (bool, error) {
+
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
