@@ -186,7 +186,7 @@ func retry(count int, interval time.Duration, f func() error) error {
 }
 
 func ParseJsonFile() (data []byte) {
-	path := "../repo.json"
+	path := "repo.json"
 
 	b, ferr := PathExists(path)
 	if ferr != nil {
@@ -194,7 +194,7 @@ func ParseJsonFile() (data []byte) {
 	}
 
 	if b {
-		fp, err := os.OpenFile("./repo.json", os.O_RDONLY, 0755)
+		fp, err := os.OpenFile(path, os.O_RDONLY, 0755)
 		defer fp.Close()
 		if err != nil {
 			log.Fatal(err)
