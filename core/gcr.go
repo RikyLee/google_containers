@@ -207,7 +207,6 @@ func ParseJsonFile() (data []byte) {
 			b = b + int64(n)
 			fil = append(fil, buffer)
 			if err != nil {
-				fmt.Println(err.Error())
 				break
 			}
 		}
